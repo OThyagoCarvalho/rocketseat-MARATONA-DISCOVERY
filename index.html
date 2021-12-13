@@ -12,27 +12,44 @@
   </head>
   <body>
     <header>
-      <h1 id="logo">dev.finance$</h1>
+      <img src="/rocketseat-MARATONA-DISCOVERY/images/logo.svg" alt="logo Dev Finance">
     </header>
     <main class="container">
       <section id="balance">
-        <h2>Balanço</h2>
+        <h2 class="sr-only">Balanço</h2>
         <div class="card">
-          <h3>Entradas</h3>
+          <h3>
+            <span>
+            Entradas          
+            </span>
+            <img src="./images/income.svg" alt="arrow pointing up">
+          </h3>
           <p>R$ 5.000,00</p>
         </div>
         <div class="card">
-          <h3>Saídas</h3>
+          <h3>
+            <span>
+              Saídas          
+              </span>
+              <img src="./images/expense.svg" alt="arrow pointing down">
+          </h3>
           <p>R$ 2.000,00</p>
         </div>
         <div class="card total class="description"">
-          <h3>Total</h3>
+          <h3>
+            <span>
+              Total          
+              </span>
+              <img src="./images/total.svg" alt="dollar sign">
+          </h3>
           <p>R$ 3.000,00</p>
         </div>
       </section>
 
       <section id="transaction">
-        <h2>Transações</h2>
+        <h2 class="sr-only">Transações</h2>
+
+        <a href="#" onclick="modal.open()" class="button new"> + Nova Transação </a>
 
         <table id="data-table">
           <thead>
@@ -40,6 +57,7 @@
               <th>Descrição</th>
               <th>Valor</th>
               <th>Data</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -47,26 +65,85 @@
               <td class="description">Luz</td>
               <td class="expense">- R$ 500,00</td>
               <td class="date">23/01/2021</td>
+              <td>
+                <img src="images/minus.svg" alt="minus sign">
+              </td>
             </tr>
 
             <tr>
               <td class="description">Criação de Website</td>
               <td class="income">R$ 5000,00</td>
               <td class="date">23/01/2021</td>
+              <td>
+                <img src="images/minus.svg" alt="minus sign">
+              </td>
             </tr>
 
             <tr>
               <td class="description">Internet</td>
               <td class="expense">- R$ 200,00</td>
               <td class="date">23/01/2021</td>
+              <td>
+                <img src="images/minus.svg" alt="minus sign">
+              </td>
             </tr>
           </tbody>
         </table>
       </section>
     </main>
 
-    <footer>
-      <p>dev.finance$</p>
+    <div class="modal-overlay">
+      <div class="modal">
+        <div id="form">
+          <h2>
+            Nova Transação
+          </h2>
+          <form action="">
+            <div class="input-group">
+              <label class="sr-only" for="description"> Descrição</label>
+              <input id="description" name="description" type="text" placeholder="Descrição">
+            </div>
+
+            <div class="input-group">
+              <label class="sr-only" for="amount"> Valor </label>
+              <input id="amount" step="0.01" name="amount" type="number" placeholder="0,00">
+              <small class="help"> Use o sinal - (negativo) para despesas e ,(vírgula) para casas decimais. </small>
+            </div>
+
+            <div class="input-group">
+              <label class="sr-only" for="date"> Data</label>
+              <input id="date" name="date" type="date" placeholder="Data">
+            </div>
+
+            <div class="input-group actions">
+              <a href="#" onclick="modal.close()" class="button cancel">Cancelar</a>
+              <button> Salvar </button>
+            </div>
+          </form>
+
+        </div>
+      </div>
+    </div>
+
+
+
+    <footer class="footer">
+      <p>2021 - dev.finance$</p>
     </footer>
+
+    <script> 
+      const modal = {
+        open (){
+          document.querySelector(".modal-overlay").classList.add("active")
+          document.querySelector(".footer").classList.add("sr-only")
+          
+        },
+        close (){
+          document.querySelector(".modal-overlay").classList.remove("active")
+          document.querySelector(".footer").classList.remove("sr-only")
+        }
+        
+      }
+    </script>
   </body>
 </html>
