@@ -55,7 +55,7 @@ a {
 }
 
 a:hover {
-  color: #3dd705;
+  color: var(--light-green);
 
 }
 
@@ -65,7 +65,7 @@ button {
 
   border: none;
   color: white;
-  background: #49aa26;
+  background: var(--light-green);
 
   padding: 0px;
   border-radius: 0.25rem;
@@ -74,7 +74,7 @@ button {
 }
 
 button:hover {
-  background: #3dd705
+  background: var(--light-green)
 }
 
 .button.cancel {
