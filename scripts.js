@@ -9,41 +9,74 @@ const modal = {
   }
 }
 
-//must creat methods to sum expenses and incomes here
+const sumTransactions = {
+  all: [
+    {
+      id: 1,
+      description: 'Luz',
+      amount: -50000,
+      date: '23/01/2021'
+    },
 
-const transactionList = [
-  {
-    id: 1,
-    description: 'Luz',
-    amount: -50000,
-    date: '23/01/2021'
+    {
+      id: 2,
+      description: 'Criação Website',
+      amount: 500000,
+      date: '23/01/2021'
+    },
+    {
+      id: 3,
+      description: 'Internet',
+      amount: -20000,
+      date: '23/01/2021'
+    },
+    {
+      id: 4,
+      description: 'Criação de App',
+      amount: 2000000,
+      date: '23/01/2021'
+    },
+    {
+      id: 5,
+      description: 'Compras',
+      amount: -100000,
+      date: '23/01/2021'
+    }
+  ],
+  add(transaction) {
+    sumTransactions.all.push(transaction)
+
+    app.reload()
   },
 
-  {
-    id: 2,
-    description: 'Criação Website',
-    amount: 500000,
-    date: '23/01/2021'
+  remove(index) {
+    sumTransactions.all.splice(index, 1)
+
+    app.reload()
   },
-  {
-    id: 3,
-    description: 'Internet',
-    amount: -20000,
-    date: '23/01/2021'
+  incomes() {
+    let income = 0
+    sumTransactions.all.forEach(transaction => {
+      if (transaction.amount > 0) {
+        income += transaction.amount
+      }
+    })
+    return income
   },
-  {
-    id: 4,
-    description: 'Criação de App',
-    amount: 2000000,
-    date: '23/01/2021'
+  expenses() {
+    let expense = 0
+    sumTransactions.all.forEach(transaction => {
+      if (transaction.amount < 0) {
+        expense += transaction.amount
+      }
+    })
+    return expense
   },
-  {
-    id: 5,
-    description: 'Compras',
-    amount: -100000,
-    date: '23/01/2021'
+  total() {
+    let total = sumTransactions.incomes() + sumTransactions.expenses()
+    return total
   }
-]
+}
 
 const DOM = {
   transactionsContainer: document.querySelector('#data-table tbody'),
@@ -70,6 +103,22 @@ const DOM = {
     `
 
     return html
+  },
+
+  updateBalance() {
+    document.getElementById('incomeDisplay').innerHTML = utils.formatCurrency(
+      sumTransactions.incomes()
+    )
+    document.getElementById('expenseDisplay').innerHTML = utils.formatCurrency(
+      sumTransactions.expenses()
+    )
+    document.getElementById('totalDisplay').innerHTML = utils.formatCurrency(
+      sumTransactions.total()
+    )
+  },
+
+  clearTransactions() {
+    DOM.transactionsContainer.innerHTML = ''
   }
 
   //must create method to update balance here.
@@ -92,8 +141,21 @@ const utils = {
   }
 }
 
-transactionList.forEach(function (transactionList) {
-  DOM.addTransaction(transactionList)
-})
+// Calls
 
-DOM.updateBalance()
+const app = {
+  init() {
+    sumTransactions.all.forEach(transactionList => {
+      DOM.addTransaction(transactionList)
+    })
+
+    DOM.updateBalance()
+  },
+
+  reload() {
+    DOM.clearTransactions()
+    app.init()
+  }
+}
+
+app.init()
