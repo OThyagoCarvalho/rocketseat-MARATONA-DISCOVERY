@@ -125,6 +125,15 @@ const DOM = {
 }
 
 const utils = {
+  formatAmount(value) {
+    value = Number(value) * 100
+
+    return value
+  },
+  formatDate(date) {
+    const splittedDate = date.split('-')
+    return `${splittedDate[2]}/${splittedDate[1]}/${splittedDate[0]}`
+  },
   formatCurrency(value) {
     const signal = Number(value) < 0 ? '-' : ''
 
@@ -138,6 +147,48 @@ const utils = {
     })
 
     return signal + value
+  }
+}
+
+const form = {
+  description: document.querySelector('input#description'),
+  amount: document.querySelector('input#amount'),
+  date: document.querySelector('input#date'),
+
+  getValues() {
+    return {
+      description: form.description.value,
+      amount: form.amount.value,
+      date: form.date.value
+    }
+  },
+
+  validateFields() {
+    const { description, amount, date } = form.getValues()
+    if (
+      description.trim() === '' ||
+      amount.trim() === '' ||
+      date.trim() === ''
+    ) {
+      throw new Error('Todos os campos são obrigatórios')
+    }
+  },
+  formatValues() {
+    let { description, amount, date } = form.getValues()
+
+    amount = utils.formatAmount(amount)
+    date = utils.formatDate(date)
+  },
+
+  submit(event) {
+    event.preventDefault()
+
+    try {
+      form.validateFields()
+      form.formatValues()
+    } catch (error) {
+      alert(error.message)
+    }
   }
 }
 
