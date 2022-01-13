@@ -9,40 +9,22 @@ const modal = {
   }
 }
 
-const sumTransactions = {
-  all: [
-    {
-      id: 1,
-      description: 'Luz',
-      amount: -50000,
-      date: '23/01/2021'
-    },
+const storage = {
+  get() {
+    return JSON.parse(localStorage.getItem('dev.finances:transaction')) || []
+  },
 
-    {
-      id: 2,
-      description: 'Criação Website',
-      amount: 500000,
-      date: '23/01/2021'
-    },
-    {
-      id: 3,
-      description: 'Internet',
-      amount: -20000,
-      date: '23/01/2021'
-    },
-    {
-      id: 4,
-      description: 'Criação de App',
-      amount: 2000000,
-      date: '23/01/2021'
-    },
-    {
-      id: 5,
-      description: 'Compras',
-      amount: -100000,
-      date: '23/01/2021'
-    }
-  ],
+  set(transactions) {
+    return localStorage.setItem(
+      'dev.finances:transaction',
+      JSON.stringify(transactions)
+    )
+  }
+}
+
+const sumTransactions = {
+  all: storage.get(),
+
   add(transaction) {
     sumTransactions.all.push(transaction)
 
@@ -82,12 +64,13 @@ const DOM = {
   transactionsContainer: document.querySelector('#data-table tbody'),
   addTransaction(transactionList, index) {
     const tr = document.createElement('tr')
-    tr.innerHTML = DOM.innerHTMLTransaction(transactionList)
+    tr.innerHTML = DOM.innerHTMLTransaction(transactionList, index)
+    tr.dataset.index = index
 
     DOM.transactionsContainer.appendChild(tr)
   },
 
-  innerHTMLTransaction(transactionList) {
+  innerHTMLTransaction(transactionList, index) {
     const CSSclass = transactionList.amount > 0 ? 'income' : 'expense'
 
     const amount = utils.formatCurrency(transactionList.amount)
@@ -98,7 +81,7 @@ const DOM = {
               <td class="${CSSclass}">${amount}</td>
               <td class="date">${transactionList.date}</td>
               <td>
-                <img src="images/minus.svg" alt="minus sign">
+                <img onclick="sumTransactions.remove(${index})" src="images/minus.svg" alt="minus sign">
               </td>
     `
 
@@ -178,6 +161,14 @@ const form = {
 
     amount = utils.formatAmount(amount)
     date = utils.formatDate(date)
+
+    return { description, amount, date }
+  },
+
+  clearFields() {
+    form.description.value = ''
+    form.amount.value = ''
+    form.date.value = ''
   },
 
   submit(event) {
@@ -185,22 +176,22 @@ const form = {
 
     try {
       form.validateFields()
-      form.formatValues()
+      const transaction = form.formatValues()
+      sumTransactions.add(transaction)
+      form.clearFields()
+      modal.close()
     } catch (error) {
       alert(error.message)
     }
   }
 }
 
-// Calls
-
 const app = {
   init() {
-    sumTransactions.all.forEach(transactionList => {
-      DOM.addTransaction(transactionList)
-    })
-
+    sumTransactions.all.forEach(DOM.addTransaction)
     DOM.updateBalance()
+
+    storage.set(sumTransactions.all)
   },
 
   reload() {
