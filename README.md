@@ -5,5 +5,7 @@
  * DOM manipulation;
  * Local Storage Setup;
  * Modals. 
+ 
+Check the final result at: https://othyagocarvalho.github.io/rocketseat-MARATONA-DISCOVERY/
 
 ![image](https://user-images.githubusercontent.com/64051560/149376988-05d8987b-6a05-4dd9-ad7d-ea35a88f751b.png)
